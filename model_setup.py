@@ -1,8 +1,8 @@
 # model_setup.py
-# model_path = "../eb3-llm-health/eb3-health"
+model_path = "../eb3-llm-health/eb3-health"
 # https://huggingface.co/launchco/eb3-llm-health
 
-model_path="/launchco/eb3-llm-health"
+# model_path="/launchco/eb3-llm-health"
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import torch
 
