@@ -1,5 +1,5 @@
 # model_setup.py
-model_path = "EB3_model"
+model_path = "/eb3-llm-health/eb3-health"
 
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import torch
