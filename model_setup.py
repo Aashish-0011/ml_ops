@@ -1,5 +1,6 @@
 # model_setup.py
-model_path = "../../eb3-llm-health/eb3-health"
+# model_path = "../../eb3-llm-health/eb3-health"
+model_path = "/workspace/EB3_model/eb3-llm-health/eb3-health"
 # https://huggingface.co/launchco/eb3-llm-health
 import os
 
