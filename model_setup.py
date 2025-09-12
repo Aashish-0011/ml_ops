@@ -1,17 +1,21 @@
 from transformers import AutoTokenizer, AutoModelForCausalLM
-import torch
+# import torch
 
+# model_path = "launchco/eb3-llm-health/tree/main/eb3-health"
 model_path = "launchco/eb3-llm-health"
 
 # Load tokenizer
 tokenizer = AutoTokenizer.from_pretrained(
     model_path,
+    subfolder="eb3-health",
     trust_remote_code=True   # Required for custom models like EB3/Qwen2
 )
 
+print('tokenizr--->>>')
 # Load model
 model = AutoModelForCausalLM.from_pretrained(
     model_path,
+    subfolder="eb3-health",
     device_map="auto",
     torch_dtype=torch.float16 if torch.cuda.is_available() else torch.float32,
     trust_remote_code=True
