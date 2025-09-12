@@ -1,20 +1,20 @@
 # model_setup.py
 # model_path = "../../eb3-llm-health/eb3-health"
 # model_path = "/workspace/EB3_model/eb3-llm-health/eb3-health"
-model_path = "/eb3-llm-health/eb3-health"
-
+# model_path = "/eb3-llm-health/eb3-health"
+model_path = "launchco/eb3-llm-health"
+#
 # https://huggingface.co/launchco/eb3-llm-health
 import os
 
-print(os.listdir())
-print(os.listdir("../../eb3-llm-health/eb3-health"))
+
 
 # model_path="/launchco/eb3-llm-health"
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import torch
 
 # Load tokenizer
-tokenizer = AutoTokenizer.from_pretrained(model_path, local_files_only=True)
+tokenizer = AutoTokenizer.from_pretrained(model_path, trust_remote_code=True)
 
 # Load model (will handle sharded safetensors automatically)
 model = AutoModelForCausalLM.from_pretrained(
@@ -22,7 +22,6 @@ model = AutoModelForCausalLM.from_pretrained(
     # torch_dtype=torch.float16,   # or torch.float32 if you don’t have a GPU runtime
     dtype=torch.float16 if torch.cuda.is_available() else torch.float32,
     device_map="auto",
-    local_files_only=True,
     trust_remote_code=True
 )
 
