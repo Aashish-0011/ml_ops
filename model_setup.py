@@ -1,5 +1,5 @@
 from transformers import AutoTokenizer, AutoModelForCausalLM
-# import torch
+import torch
 
 # model_path = "launchco/eb3-llm-health/tree/main/eb3-health"
 model_path = "launchco/eb3-llm-health"
