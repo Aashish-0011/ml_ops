@@ -12,14 +12,16 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 import torch
 
 # Load tokenizer
-tokenizer = AutoTokenizer.from_pretrained(model_path)
+tokenizer = AutoTokenizer.from_pretrained(model_path, local_files_only=True)
 
 # Load model (will handle sharded safetensors automatically)
 model = AutoModelForCausalLM.from_pretrained(
     model_path,
     # torch_dtype=torch.float16,   # or torch.float32 if you don’t have a GPU runtime
     dtype=torch.float16 if torch.cuda.is_available() else torch.float32,
-    device_map="auto"
+    device_map="auto",
+    local_files_only=True,
+    trust_remote_code=True
 )
 
 
