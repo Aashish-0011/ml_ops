@@ -78,7 +78,7 @@ async def generate_text(prompt: str = "hi"):
     """
     print('promt-->>', ml_prompt)
     inputs = tokenizer(ml_prompt, return_tensors="pt").to(model.device)
-    outputs = model.generate(**inputs, max_length=100)
+    outputs = model.generate(**inputs, max_length=5000)
     response_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
     # return {"response": response_text}
      # Try to parse JSON safely
