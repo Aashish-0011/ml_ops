@@ -24,54 +24,27 @@ async def generate_text(prompt: str = "hi"):
 
     ml_prompt =  f"""
     Extract the insurance details from the following text and return them strictly in JSON format 
-    with this structure:
-    {{
-      "carrier_name": "...",
-      "plan_name": "...",
-      "plan_year": "...",
-      "deductible_period": "...",
-      "deductible_explanation": "...",
-      "network_type": "...",
-      "network_name": "...",
-      "website": "...",
-      "customer_service_phone": "...",
-      "deductibles": {{
-        "in_network": {{"single": "...", "family": "..."}},
-        "out_of_network": {{"single": "...", "family": "..."}}
-      }},
-      "oop_maximums": {{
-        "in_network": {{"single": "...", "family": "..."}},
-        "out_of_network": {{"single": "...", "family": "..."}}
-      }},
-      "coinsurance": {{
-        "in_network": "...",
-        "out_of_network": "..."
-      }},
-      "visits": {{
-        "pcp": {{"in_network": "...", "out_of_network": "..."}},
-        "specialist": {{"in_network": "...", "out_of_network": "..."}},
-        "urgent_care": {{"in_network": "...", "out_of_network": "..."}},
-        "emergency_room": {{"in_network": "...", "out_of_network": "..."}},
-        "preventive": {{"in_network": "...", "out_of_network": "..."}}
-      }},
-      "surgeries": {{
-        "outpatient": {{"in_network": "...", "out_of_network": "..."}},
-        "inpatient": {{"in_network": "...", "out_of_network": "..."}},
-        "newborn_delivery": {{"in_network": "...", "out_of_network": "..."}}
-      }},
-      "diagnostics": {{
-        "major": {{"in_network": "...", "out_of_network": "..."}}
-      }},
-      "prescriptions": {{
-        "rx_deductible": {{"in_network": "...", "out_of_network": "..."}},
-        "generic": {{"in_network": "...", "out_of_network": "..."}},
-        "brand": {{"in_network": "...", "out_of_network": "..."}},
-        "tier_3": {{"in_network": "...", "out_of_network": "..."}},
-        "tier_4": {{"in_network": "...", "out_of_network": "..."}},
-        "tier_5": {{"in_network": "...", "out_of_network": "..."}},
-        "mail_order": {{"in_network": "...", "out_of_network": "..."}}
-      }}
-    }}
+    with the following keys:
+
+    carrier_name,
+    plan_name,
+    plan_year,
+    deductible_period,
+    deductible_explanation,
+    network_type,
+    network_name,
+    website,
+    customer_service_phone,
+    deductibles (with subkeys: in_network(single, family), out_of_network(single, family)),
+    oop_maximums (with subkeys: in_network(single, family), out_of_network(single, family)),
+    coinsurance (with subkeys: in_network, out_of_network),
+    visits (with subkeys: pcp(in_network, out_of_network), specialist(in_network, out_of_network), urgent_care(in_network, out_of_network), emergency_room(in_network, out_of_network), preventive(in_network, out_of_network)),
+    surgeries (with subkeys: outpatient(in_network, out_of_network), inpatient(in_network, out_of_network), newborn_delivery(in_network, out_of_network)),
+    diagnostics (with subkeys: major(in_network, out_of_network)),
+    prescriptions (with subkeys: rx_deductible(in_network, out_of_network), generic(in_network, out_of_network), brand(in_network, out_of_network), tier_3(in_network, out_of_network), tier_4(in_network, out_of_network), tier_5(in_network, out_of_network), mail_order(in_network, out_of_network)).
+
+    Return only JSON.
+
 
 
     Input: {prompt}
@@ -80,6 +53,8 @@ async def generate_text(prompt: str = "hi"):
     inputs = tokenizer(ml_prompt, return_tensors="pt").to(model.device)
     outputs = model.generate(**inputs, max_length=1000)
     response_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
+
+    print('response_text---->>', response_text)
     # return {"response": response_text}
      # Try to parse JSON safely
     try:
