@@ -21,11 +21,31 @@ class PromptRequest(BaseModel):
 
 @app.get("/generate")
 async def generate_text(prompt: str = "hi"):
-    print('promt-->>', prompt)
-    inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
+
+    ml_prompt = f"""
+    Extract the insurance details from the following text and return them strictly in JSON format with keys:
+    ["insurance_name", "policy_number", "expiry_date", "coverage_amount"]
+
+    Input: {prompt}
+    """
+    print('promt-->>', ml_prompt)
+    inputs = tokenizer(ml_prompt, return_tensors="pt").to(model.device)
     outputs = model.generate(**inputs, max_length=100)
     response_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
-    return {"response": response_text}
+    # return {"response": response_text}
+     # Try to parse JSON safely
+    try:
+        response_json = json.loads(response_text)
+    except json.JSONDecodeError:
+        # Fallback: attempt cleanup (strip code fences, extra text)
+        cleaned = response_text.strip().replace("```json", "").replace("```", "")
+        try:
+            response_json = json.loads(cleaned)
+        except:
+            response_json = {"raw_output": response_text}
+
+    return {"insurance_details": response_json}
+
 
 @app.get("/")
 async def root():
