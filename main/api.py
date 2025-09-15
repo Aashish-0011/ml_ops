@@ -6,7 +6,10 @@ from transformers import AutoTokenizer, AutoModelForCausalLM
 import torch
 import uvicorn
 
-from model_setup import model_path, model, tokenizer
+from model_setup import model_path, tokenize_data, load_model
+
+tokenizer=tokenize_data()
+model=load_model()
 
 print('model_path--->>>', model_path)
 
