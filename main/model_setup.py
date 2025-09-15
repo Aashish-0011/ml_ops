@@ -22,7 +22,9 @@ model = AutoModelForCausalLM.from_pretrained(
 )
 
 # # Quick test
-# prompt = "Hello, how are you?"
-# inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
-# outputs = model.generate(**inputs, max_length=100)
-# print(tokenizer.decode(outputs[0], skip_special_tokens=True))
+
+print('device-->>',  model.device)
+prompt = "Hello, how are you?"
+inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
+outputs = model.generate(**inputs, max_length=100)
+print(tokenizer.decode(outputs[0], skip_special_tokens=True))
