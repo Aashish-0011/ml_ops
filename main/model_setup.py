@@ -4,6 +4,11 @@ import torch
 # model_path = "launchco/eb3-llm-health/tree/main/eb3-health"
 model_path = "launchco/eb3-llm-health"
 
+
+
+print(torch.cuda.is_available())
+
+
 # # Load tokenizer
 tokenizer = AutoTokenizer.from_pretrained(
     model_path,
