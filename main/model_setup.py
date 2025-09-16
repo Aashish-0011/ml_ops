@@ -24,16 +24,24 @@ def tokenize_data(model_path="launchco/eb3-llm-health"):
 def load_model(model_path="launchco/eb3-llm-health"):
 
     # 8-bit quantization config
-    bnb_config = BitsAndBytesConfig(
-        load_in_8bit=True,
-        llm_int8_enable_fp32_cpu_offload=True  # allow offload if VRAM is low
-    )
+    # bnb_config = BitsAndBytesConfig(
+    #     load_in_8bit=True,
+    #     llm_int8_enable_fp32_cpu_offload=True  # allow offload if VRAM is low
+    # )
 
+    
+    bnb_config = BitsAndBytesConfig(
+        load_in_4bit=True,
+        bnb_4bit_quant_type="nf4",
+        bnb_4bit_use_double_quant=True,
+        bnb_4bit_compute_dtype=torch.float16,
+)
     model = AutoModelForCausalLM.from_pretrained(
         model_path,
         subfolder="eb3-health",
         quantization_config=bnb_config,
         device_map="auto",
+        llm_int8_enable_fp32_cpu_offload=True,
         # torch_dtype=torch.float16 if torch.cuda.is_available() else torch.float32,
         trust_remote_code=True
     )
