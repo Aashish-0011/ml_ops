@@ -45,7 +45,7 @@ def load_model(model_path="launchco/eb3-llm-health"):
     model = AutoModelForCausalLM.from_pretrained(
         model_path,
         subfolder="eb3-health",
-        quantization_config=bnb_config,
+        # quantization_config=bnb_config,
         device_map="auto",
         # max_memory=max_memory,
         # torch_dtype=torch.float16 if torch.cuda.is_available() else torch.float32,
