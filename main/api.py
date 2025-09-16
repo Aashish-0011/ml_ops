@@ -5,6 +5,7 @@ from pydantic import BaseModel
 from transformers import AutoTokenizer, AutoModelForCausalLM
 import torch
 import uvicorn
+import json
 
 from model_setup import model_path, tokenize_data, load_model
 
@@ -59,7 +60,9 @@ async def generate_text(prompt: str = "hi"):
      # Try to parse JSON safely
     try:
         response_json = json.loads(response_text)
-    except json.JSONDecodeError:
+    except json.JSONDecodeError as e:
+        print('excetio in  json decode-->>>',e )
+        print('response_text',response_text )
         # Fallback: attempt cleanup (strip code fences, extra text)
         cleaned = response_text.strip().replace("```json", "").replace("```", "")
         try:
