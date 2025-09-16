@@ -92,10 +92,12 @@ async def generate_text(prompt: str = "hi"):
     # 
 
     # print("prompt-->>", ml_prompt)
-
+    print('start')
     inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
     outputs = model.generate( **inputs, max_length=1200)
     response_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
+
+    print('done')
 
     print("\n\n\n\nraw response---->>", response_text)
 
