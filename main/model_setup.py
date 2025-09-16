@@ -29,6 +29,12 @@ def load_model(model_path="launchco/eb3-llm-health"):
     #     llm_int8_enable_fp32_cpu_offload=True  # allow offload if VRAM is low
     # )
 
+    max_memory = {
+        0: "14GiB",   # GPU0
+        1: "14GiB",   # GPU1
+        "cpu": "32GiB"
+    }
+
     
     bnb_config = BitsAndBytesConfig(
         load_in_4bit=True,
@@ -41,7 +47,7 @@ def load_model(model_path="launchco/eb3-llm-health"):
         subfolder="eb3-health",
         quantization_config=bnb_config,
         device_map="auto",
-        llm_int8_enable_fp32_cpu_offload=True,
+        max_memory=max_memory,
         # torch_dtype=torch.float16 if torch.cuda.is_available() else torch.float32,
         trust_remote_code=True
     )
