@@ -87,32 +87,17 @@ async def generate_text(prompt: str = "hi"):
     # prompt = "Hello, how are you?"
     # inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
     # outputs = model.generate(**inputs, max_length=100)
+
+    ml_prompt=f"Format the following document text into EB3 format:\n\ndocument:\n\n{prompt}""
     
 
-    print("prompt-->>", prompt)
+    print("prompt-->>", ml_prompt)
 
-    inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
+    inputs = tokenizer(ml_prompt, return_tensors="pt").to(model.device)
     outputs = model.generate( **inputs, max_length=1200)
     response_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
 
     print("\n\n\n\nraw response---->>", response_text)
-
-    # # Try to extract JSON from model response
-    # cleaned = response_text.strip()
-    # # remove code fences if they exist
-    # cleaned = cleaned.replace("```json", "").replace("```", "").strip()
-
-    # # Sometimes the model echoes the instruction, strip leading junk
-    # json_start = cleaned.find("{")
-    # json_end = cleaned.rfind("}")
-    # if json_start != -1 and json_end != -1:
-    #     cleaned = cleaned[json_start:json_end + 1]
-
-    # try:
-    #     response_json = json.loads(cleaned)
-    # except json.JSONDecodeError as e:
-    #     print("JSON decode error:", e)
-    #     response_json = {"raw_output": response_text}
 
     return {"insurance_details": response_text}
 
