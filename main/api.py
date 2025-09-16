@@ -88,7 +88,7 @@ async def generate_text(prompt: str = "hi"):
     # inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
     # outputs = model.generate(**inputs, max_length=100)
 
-    ml_prompt=f"Format the following document text into EB3 format:\n\ndocument:\n\n{prompt}""
+    ml_prompt=f"Format the following document text into EB3 format:\n\ndocument:\n\n{prompt}"
     
 
     print("prompt-->>", ml_prompt)
