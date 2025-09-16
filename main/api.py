@@ -22,8 +22,7 @@ class PromptRequest(BaseModel):
 
 @app.get("/generate")
 async def generate_text(prompt: str = "hi"):
-
-    ml_prompt =  f"""
+    ml_prompt = f"""
     Extract the insurance details from the following text and return them strictly in JSON format 
     with the following keys:
 
@@ -46,31 +45,41 @@ async def generate_text(prompt: str = "hi"):
 
     Return only JSON.
 
-
-
     Input: {prompt}
     """
-    print('promt-->>', ml_prompt)
+
+    print("prompt-->>", ml_prompt)
+
     inputs = tokenizer(ml_prompt, return_tensors="pt").to(model.device)
-    outputs = model.generate(**inputs, max_length=1000)
+    outputs = model.generate(
+        **inputs,
+        max_new_tokens=1200,   # safer than max_length
+        temperature=0.2,       # keep responses more deterministic
+        do_sample=False        # avoid random junk
+    )
     response_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
 
-    print('response_text---->>', response_text)
-    # return {"response": response_text}
-     # Try to parse JSON safely
+    print("raw response---->>", response_text)
+
+    # Try to extract JSON from model response
+    cleaned = response_text.strip()
+    # remove code fences if they exist
+    cleaned = cleaned.replace("```json", "").replace("```", "").strip()
+
+    # Sometimes the model echoes the instruction, strip leading junk
+    json_start = cleaned.find("{")
+    json_end = cleaned.rfind("}")
+    if json_start != -1 and json_end != -1:
+        cleaned = cleaned[json_start:json_end + 1]
+
     try:
-        response_json = json.loads(response_text)
+        response_json = json.loads(cleaned)
     except json.JSONDecodeError as e:
-        print('excetio in  json decode-->>>',e )
-        print('response_text',response_text )
-        # Fallback: attempt cleanup (strip code fences, extra text)
-        cleaned = response_text.strip().replace("```json", "").replace("```", "")
-        try:
-            response_json = json.loads(cleaned)
-        except:
-            response_json = {"raw_output": response_text}
+        print("JSON decode error:", e)
+        response_json = {"raw_output": response_text}
 
     return {"insurance_details": response_json}
+
 
 
 @app.get("/")
