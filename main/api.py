@@ -7,12 +7,26 @@ import torch
 import uvicorn
 import json
 
-from model_setup import model_path, tokenize_data, load_model
+model_id = "aashish12/eb3_quantized"
 
-tokenizer=tokenize_data()
-model=load_model()
+# from model_setup import model_path, tokenize_data, load_model
 
-print('model_path--->>>', model_path)
+#  load quatized_model
+#  function to  tokenzi
+
+# Load tokenizer
+tokenizer = AutoTokenizer.from_pretrained(model_id)
+
+# Load quantized model
+model = AutoModelForCausalLM.from_pretrained(
+    model_id,
+    device_map="auto",        # automatically put on GPU if available
+    torch_dtype=torch.bfloat16, # or torch.float16 depending on GPU
+    trust_remote_code=True
+)
+
+
+print('model_path--->>>', model_id)
 
 # Create API
 app = FastAPI()
