@@ -1,8 +1,11 @@
 from transformers import AutoTokenizer, AutoModelForCausalLM, BitsAndBytesConfig
 import torch
+from huggingface_hub import HfApi
 
 # model_path = "launchco/eb3-llm-health/tree/main/eb3-health"
 model_path = "launchco/eb3-llm-health"
+quantized_local_dir = "eb3_quantized_local"     # where to save locally
+repo_id = "aashish12/eb3_quantized"
 
 
 
@@ -53,6 +56,23 @@ def load_model(model_path="launchco/eb3-llm-health"):
     )
     return model
 
+# Save quantized model locally
+# -------------------
+def save_quantized_model(model, tokenizer, save_dir=quantized_local_dir):
+    model.save_pretrained(save_dir)
+    tokenizer.save_pretrained(save_dir)
+    print(f"✅ Quantized model saved at {save_dir}")
+
+
+def upload_to_hf(local_dir=quantized_local_dir, repo_id=repo_id):
+    api = HfApi()
+    api.upload_folder(
+        folder_path=local_dir,
+        repo_id=repo_id
+    )
+    print(f"🚀 Model uploaded to https://huggingface.co/{repo_id}")
+
+
 # # Quick test
 
 # print('device-->>',  model.device)
@@ -60,3 +80,15 @@ def load_model(model_path="launchco/eb3-llm-health"):
 # inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
 # outputs = model.generate(**inputs, max_length=100)
 # print(tokenizer.decode(outputs[0], skip_special_tokens=True))
+if __name__ == "__main__":
+    print("🔥 Loading tokenizer...")
+    tokenizer = tokenize_data()
+
+    print("🔥 Loading and quantizing model...")
+    model = load_model()
+
+    print("💾 Saving quantized model locally...")
+    save_quantized_model(model, tokenizer)
+
+    print("☁️ Uploading to Hugging Face Hub...")
+    upload_to_hf()
