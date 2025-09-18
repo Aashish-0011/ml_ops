@@ -119,6 +119,11 @@ async def generate_text(prompt: str = "hi"):
     # Try to extract JSON only
     start = response_text.find("{")
     end = response_text.rfind("}")
+
+    print('start-->>', start)
+    print('end-->>', end)
+
+    
     if start != -1 and end != -1:
         json_text = response_text[start:end+1]
 
