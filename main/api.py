@@ -21,7 +21,7 @@ tokenizer = AutoTokenizer.from_pretrained(model_id)
 model = AutoModelForCausalLM.from_pretrained(
     model_id,
     device_map="auto",        # automatically put on GPU if available
-    torch_dtype=torch.bfloat16, # or torch.float16 depending on GPU
+    dtype=torch.float16, # or torch.float16 depending on GPU
     trust_remote_code=True
 )
 
@@ -103,12 +103,15 @@ async def generate_text(prompt: str = "hi"):
     # outputs = model.generate(**inputs, max_length=100)
 
     # ml_prompt=f"Format the following document text into EB3 format:\n\ndocument:\n\n{prompt}"
+    print('length 0f the promtpt--->>>', len(prompt))
+    max_length=len(prompt)+50
+    print('max-length-->>' , max_length)
     # 
 
     # print("prompt-->>", ml_prompt)
     print('start')
     inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
-    outputs = model.generate( **inputs, max_length=2200,  temperature=0.0, top_p=1.0, do_sample=False,)
+    outputs = model.generate( **inputs, max_length=max_length,  temperature=0.0, top_p=1.0, do_sample=False,)
     response_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
 
     
