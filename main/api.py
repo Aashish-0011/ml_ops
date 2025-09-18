@@ -111,7 +111,7 @@ async def generate_text(prompt: str = "hi"):
     # print("prompt-->>", ml_prompt)
     print('start')
     inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
-    outputs = model.generate( **inputs, max_length=1200,  temperature=0.0, top_p=1.0, do_sample=False,)
+    outputs = model.generate( **inputs, max_new_tokens=1200,  temperature=0.0, top_p=1.0, do_sample=False,)
     response_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
 
     # Try to extract JSON only
