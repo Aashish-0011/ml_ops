@@ -114,6 +114,8 @@ async def generate_text(prompt: str = "hi"):
     outputs = model.generate( **inputs, max_new_tokens=1200,  temperature=0.0, top_p=1.0, do_sample=False,)
     response_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
 
+    print("response_text-->>>",response_text,'\n\n\n')
+
     # Try to extract JSON only
     start = response_text.find("{")
     end = response_text.rfind("}")
@@ -126,9 +128,9 @@ async def generate_text(prompt: str = "hi"):
             return json.loads(json_text)  # returns Python dict
         except json.JSONDecodeError:
             
-            return {"raw_output": response_text}
-    else:
-        return {"raw_output": response_text}
+            return {"insurance_details": response_text}
+    # else:
+    #     return {"raw_output": response_text}
 
 
     
