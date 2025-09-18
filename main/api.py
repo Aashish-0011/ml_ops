@@ -23,7 +23,7 @@ model = AutoModelForCausalLM.from_pretrained(
     device_map="auto",        # automatically put on GPU if available
     dtype=torch.float16, # or torch.float16 depending on GPU
     trust_remote_code=True,
-    attn_implementation="flash_attention_2"
+    # attn_implementation="flash_attention_2"
 
 )
 
