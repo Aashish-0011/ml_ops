@@ -113,9 +113,9 @@ async def generate_text(prompt: str = "hi"):
     # print("prompt-->>", ml_prompt)
     print('start')
     inputs = tokenizer(prompt, return_tensors="pt").to(model.device)
-    outputs = model.generate( **inputs, max_new_tokens=1500,  temperature=0.0, top_p=1.0, do_sample=False,  use_cache=True,  return_dict_in_generate=True,output_scores=False )
-    # response_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
-    response_text = tokenizer.decode(outputs.sequences[0], skip_special_tokens=True)
+    outputs = model.generate( **inputs, max_new_tokens=1500,  temperature=0.0, top_p=1.0, do_sample=False,  use_cache=True)
+    response_text = tokenizer.decode(outputs[0], skip_special_tokens=True)
+    # response_text = tokenizer.decode(outputs.sequences[0], skip_special_tokens=True)
 
 
     print("response_text-->>>",response_text,'\n\n\n')
@@ -134,8 +134,10 @@ async def generate_text(prompt: str = "hi"):
         print('json text-->>>',  json_text)
         print('\n\n type json text-->>>', type( json_text))
         try:
-            return json.loads(json_text)  # returns Python dict
-        except json.JSONDecodeError:
+            data= json.loads(json_text)
+            return data  # returns Python dict
+        except json.JSONDecodeError as e:
+            print("erro in  json--->>",e )
             
             return {"insurance_details": response_text}
     # else:
